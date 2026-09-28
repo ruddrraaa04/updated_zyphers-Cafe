@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#263c32" />
+  <meta name="description" content="Meet, eat, and linger at Zypher’s, a café on Park Street in Wakad. Discover comfort food, coffee, and your next favourite table." />
+  <title>Zypher’s — Good food. Better company.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --cream: #f8f5ed;
+      --paper: #eeeee4;
+      --green: #263c32;
+      --sage: #dce4d6;
+      --orange: #e8a077;
+      --ink: #28372e;
+      --muted: #687266;
+      --line: rgba(38, 60, 50, .18);
+      --serif: "Playfair Display", Georgia, serif;
+      --sans: "DM Sans", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+    body { margin: 0; background: var(--cream); color: var(--ink); font-family: var(--sans); }
+    body.locked { overflow: hidden; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button, input { font: inherit; }
+    button, a { touch-action: manipulation; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid #b25e35;
+      outline-offset: 6px;
+    }
+    ::selection { background: var(--orange); color: var(--green); }
+    .container { width: min(1280px, 88%); margin-inline: auto; }
+    .eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: ""; width: 25px; height: 1px; background: currentColor;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 24px; min-height: 52px; padding: 15px 25px;
+      border: 1px solid var(--green); border-radius: 4px;
+      background: var(--green); color: var(--cream);
+      font-size: 12px; font-weight: 600;
+      transition: background .2s, transform .2s;
+    }
+    .btn:hover { background: #3c5547; transform: translateY(-2px); }
+    .btn-light { background: var(--cream); color: var(--green); border-color: var(--cream); }
+    .btn-light:hover { background: var(--sage); }
+    .text-link {
+      display: inline-flex; gap: 22px; align-items: center;
+      font-size: 12px; font-weight: 700; padding: 10px 0;
+      border-bottom: 1px solid var(--green);
+    }
+
+    /* Navigation */
+    .announcement {
+      background: var(--green); color: var(--cream);
+      text-align: center; padding: 11px 20px;
+      font-size: 10px; letter-spacing: 1.7px;
+    }
+    header {
+      position: sticky; top: 0; z-index: 20;
+      background: rgba(248,245,237,.96);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .nav { min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+    .logo { font-family: var(--serif); font-size: 38px; font-weight: 600; letter-spacing: -2.5px; }
+    .logo span { color: #b3724e; }
+    .nav-links { display: flex; align-items: center; gap: 35px; }
+    .nav-links > a:not(.btn) { font-size: 12px; }
+    .nav-links > a:not(.btn):hover { color: #ad6944; }
+    .nav .btn { min-height: 43px; padding: 12px 20px; }
+    .mobile-toggle { display: none; border: 0; padding: 10px; background: none; color: var(--green); font-size: 24px; }
+
+    /* Hero */
+    .hero { padding: 68px 0 64px; overflow: hidden; }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 55px; }
+    .hero h1 {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(64px, 6.7vw, 96px);
+      line-height: 1.06; letter-spacing: -5px;
+      margin: 25px 0;
+    }
+    .hero h1 em { font-weight: 400; color: #7a8968; }
+    .hero-description { max-width: 340px; font-size: 14px; line-height: 1.9; color: var(--muted); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 28px; align-items: center; margin-top: 32px; }
+    .hero-rating { margin-top: 45px; display: flex; gap: 16px; align-items: center; }
+    .rating-number { font-family: var(--serif); font-size: 36px; }
+    .rating-detail { border-left: 1px solid var(--line); padding-left: 16px; }
+    .stars { color: #a56b42; letter-spacing: 3px; font-size: 11px; }
+    .rating-detail p { margin: 5px 0 0; font-size: 10px; color: var(--muted); }
+
+    .hero-art { position: relative; height: 540px; }
+    .hero-photo {
+      position: absolute; left: 8%; top: 0; width: 88%; height: 475px;
+      border-radius: 190px 190px 8px 8px; overflow: hidden;
+      background: var(--sage);
+    }
+    .hero-photo img { object-position: 50% 55%; }
+    .coffee-photo {
+      position: absolute; bottom: 0; left: -6%; width: 205px; height: 240px;
+      border: 8px solid var(--cream); border-radius: 110px 110px 5px 5px;
+      overflow: hidden; transform: rotate(-8deg);
+      box-shadow: 0 12px 35px rgba(38,60,50,.1);
+    }
+    .roundel {
+      position: absolute; right: -3%; top: 30px; width: 119px; height: 119px;
+      border-radius: 50%; background: var(--orange);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      text-align: center; transform: rotate(13deg);
+      outline: 1px dashed var(--green); outline-offset: -9px;
+      font-size: 9px; letter-spacing: 1.5px; line-height: 1.8; font-weight: 700;
+    }
+    .roundel b { font-family: var(--serif); font-size: 30px; line-height: 1.2; font-weight: 400; }
+    .photo-note { position: absolute; bottom: 15px; right: 3%; font-family: var(--serif); font-size: 19px; font-style: italic; }
+
+    .ribbon { border-block: 1px solid var(--line); background: var(--sage); }
+    .ribbon-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; padding: 23px 0; font-size: 10px; letter-spacing: 2px;
+      font-weight: 600; text-transform: uppercase;
+    }
+    .ribbon-inner .flower { font-size: 22px; font-weight: 400; }
+
+    /* Menu */
+    .menu-section { padding: 92px 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 38px; }
+    h2 { font-family: var(--serif); font-size: clamp(38px,4vw,55px); font-weight: 400; line-height: 1.15; letter-spacing: -2px; margin: 17px 0 0; }
+    h2 em { font-weight: 400; }
+    .menu-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 25px; }
+    .dish-image { height: 290px; border-radius: 7px; overflow: hidden; position: relative; background: var(--sage); }
+    .dish-image img { transition: transform .65s; }
+    .dish:hover img { transform: scale(1.06); }
+    .dish-tag { position: absolute; left: 15px; top: 15px; background: var(--cream); padding: 8px 11px; font-size: 9px; letter-spacing: 1px; text-transform: uppercase; border-radius: 2px; }
+    .dish-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; }
+    .dish h3 { font-family: var(--serif); font-size: 23px; font-weight: 400; margin: 0; letter-spacing: -.5px; }
+    .dish p { font-size: 12px; color: var(--muted); margin: 8px 0 0; line-height: 1.7; }
+    .dish-number { font-size: 10px; color: var(--muted); }
+    .menu-note { font-size: 11px; color: var(--muted); margin-top: 25px; }
+
+    /* Story */
+    .story { background: var(--paper); padding: 80px 0; }
+    .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 85px; align-items: center; }
+    .story-image { position: relative; height: 450px; }
+    .story-image > img { border-radius: 6px 6px 140px 6px; }
+    .story-stamp {
+      position: absolute; bottom: 25px; left: -24px;
+      padding: 21px 24px; background: var(--orange);
+      font-family: var(--serif); font-size: 22px; transform: rotate(-5deg);
+    }
+    .story-copy p { font-size: 14px; line-height: 1.95; color: var(--muted); max-width: 390px; margin: 24px 0; }
+    .values { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 5px; }
+    .value { border: 1px solid var(--line); border-radius: 30px; padding: 10px 14px; font-size: 10px; }
+
+    /* Reviews */
+    .reviews { padding: 90px 0; text-align: center; }
+    .reviews .eyebrow { justify-content: center; }
+    .reviews .eyebrow::before { display: none; }
+    .review-grid { margin-top: 38px; display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; text-align: left; }
+    .review-card { border: 1px solid var(--line); border-radius: 6px; padding: 29px; display: flex; flex-direction: column; }
+    .quote-mark { font-family: var(--serif); font-size: 52px; line-height: 1; color: #8d9b7c; }
+    .review-card blockquote { margin: 0 0 26px; font-family: var(--serif); font-size: 19px; line-height: 1.65; flex: 1; }
+    .review-author { font-size: 11px; font-weight: 700; }
+    .review-source { font-size: 10px; color: var(--muted); margin-top: 5px; }
+
+    /* Visit */
+    .visit { background: var(--green); color: var(--cream); padding: 72px 0; position: relative; overflow: hidden; }
+    .visit::after {
+      content: "Z"; position: absolute; right: -15px; bottom: -120px;
+      font-family: var(--serif); font-size: 440px; line-height: 1; opacity: .04;
+      pointer-events: none;
+    }
+    .visit-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 80px; align-items: center; position: relative; z-index: 1; }
+    .visit h2 { font-size: clamp(48px,5vw,68px); }
+    .visit h2 em { color: #c6d3b8; }
+    .visit p { font-size: 13px; line-height: 1.8; color: #ccd4c9; max-width: 360px; margin: 22px 0 28px; }
+    .visit-details { border-top: 1px solid #ffffff30; }
+    .detail-row { display: grid; grid-template-columns: 85px 1fr; gap: 24px; padding: 22px 0; border-bottom: 1px solid #ffffff30; }
+    .detail-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #b9c9b1; padding-top: 3px; }
+    .detail-content { font-size: 13px; line-height: 1.8; }
+    .detail-content small { display: block; opacity: .65; font-size: 10px; margin-top: 4px; }
+    footer { padding: 35px 0; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 25px; }
+    footer .logo { font-size: 30px; }
+    .footer-note { font-size: 10px; color: var(--muted); }
+    .footer-link { font-size: 11px; }
+
+    /* Menu dialog */
+    dialog {
+      width: min(560px, calc(100% - 32px)); max-height: 85dvh;
+      padding: 38px; border: 1px solid var(--line); border-radius: 12px;
+      color: var(--green); background: var(--cream);
+    }
+    dialog::backdrop { background: rgba(18,30,23,.65); backdrop-filter: blur(5px); }
+    .dialog-close { position: absolute; right: 15px; top: 12px; background: transparent; border: 0; font-size: 26px; color: var(--green); padding: 6px 10px; }
+    dialog h2 { font-size: 38px; margin-bottom: 12px; }
+    .dialog-intro { font-size: 13px; color: var(--muted); line-height: 1.8; }
+    .menu-list { list-style: none; margin: 25px 0; padding: 0; }
+    .menu-list li { padding: 15px 0; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+    .menu-list span { font-family: var(--serif); font-size: 19px; }
+    .menu-list small { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+
+    @media (min-width: 1500px) {
+      .hero { padding-block: 85px; }
+    }
+    @media (max-width: 1000px) {
+      .hero-grid { gap: 28px; }
+      .hero h1 { font-size: 70px; }
+      .hero-art { height: 470px; }
+      .hero-photo { height: 420px; }
+      .coffee-photo { width: 165px; height: 200px; }
+      .roundel { width: 100px; height: 100px; }
+      .story-grid { gap: 45px; }
+      .dish-image { height: 240px; }
+      .dish h3 { font-size: 20px; }
+      .visit-grid { gap: 40px; }
+    }
+    @media (max-width: 760px) {
+      .container { width: 88%; }
+      .announcement { font-size: 8px; letter-spacing: 1.1px; }
+      .nav { min-height: 75px; }
+      .logo { font-size: 34px; }
+      .mobile-toggle { display: block; }
+      .nav-links {
+        display: none; position: absolute; top: 100%; left: 0; right: 0;
+        padding: 25px 6% 30px; background: var(--cream);
+        border-bottom: 1px solid var(--line);
+        align-items: stretch; flex-direction: column; gap: 24px;
+      }
+      .nav-links.open { display: flex; }
+      .hero { padding-top: 40px; padding-bottom: 35px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 35px; }
+      .hero h1 { font-size: clamp(58px, 12vw, 86px); letter-spacing: -3.5px; }
+      .hero-description { max-width: 400px; }
+      .hero-rating { margin-top: 28px; }
+      .hero-art { height: 460px; width: min(450px, 100%); margin: 0 auto; }
+      .hero-photo { height: 410px; width: 84%; left: 10%; }
+      .coffee-photo { left: 0; width: 170px; height: 205px; }
+      .roundel { right: 0; }
+      .photo-note { font-size: 16px; }
+      .ribbon-inner { flex-wrap: wrap; justify-content: center; gap: 16px 20px; font-size: 8px; padding: 19px 0; }
+      .ribbon-inner .flower { font-size: 15px; }
+      .ribbon-inner .flower:last-child { display: none; }
+      .menu-section, .reviews { padding: 60px 0; }
+      .section-head { align-items: start; flex-direction: column; gap: 18px; }
+      .menu-grid { grid-template-columns: 1fr; gap: 32px; }
+      .dish-image { height: 320px; }
+      .dish h3 { font-size: 25px; }
+      .story { padding: 55px 0; }
+      .story-grid { grid-template-columns: 1fr; gap: 45px; }
+      .story-image { height: 380px; }
+      .story-stamp { left: -12px; }
+      .review-grid { grid-template-columns: 1fr; }
+      .visit { padding: 55px 0; }
+      .visit-grid { grid-template-columns: 1fr; gap: 38px; }
+      .footer-inner { flex-wrap: wrap; }
+      .footer-note { order: 3; width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="announcement">YOUR LITTLE CORNER OF WAKAD. COME HUNGRY, STAY A WHILE.</div>
+
+  <header>
+    <nav class="container nav" aria-label="Main navigation">
+      <a class="logo" href="#" aria-label="Zypher’s home">zypher’s<span>✳</span></a>
+      <button class="mobile-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="navigation">☰</button>
+      <div class="nav-links" id="navigation">
+        <a href="#our-story">Our story</a>
+        <a href="#menu">On the menu</a>
+        <a href="#kind-words">Kind words</a>
+        <a href="#visit" class="btn">Come on over <span aria-hidden="true">↗</span></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="eyebrow">A café, and a little more · Wakad</div>
+          <h1>Good food.<br />Better <em>company.</em></h1>
+          <p class="hero-description">
+            For coffee that turns into conversations, plates made for sharing,
+            and the lovely art of taking your time.
+          </p>
+          <div class="hero-actions">
+            <a class="btn" href="#menu">Find your favourite <span aria-hidden="true">↗</span></a>
+            <a class="text-link" href="#visit">Visit Zypher’s <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-rating" aria-label="Listed rating: 4.6 out of 5 from 1,056 reviews">
+            <span class="rating-number">4.6</span>
+            <div class="rating-detail">
+              <div class="stars" aria-hidden="true">★★★★★</div>
+              <p>1,056 reviews in our supplied listing</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-art">
+          <div class="hero-photo">
+            <img
+              src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=85"
+              alt="Warm restaurant inspiration with thoughtfully set tables"
+              fetchpriority="high"
+            />
+          </div>
+          <div class="coffee-photo">
+            <img
+              src="https://images.unsplash.com/photo-1511081692775-05d0f180a065?auto=format&fit=crop&w=550&q=85"
+              alt="An inviting cup of coffee"
+            />
+          </div>
+          <div class="roundel" aria-hidden="true">
+            A LITTLE BREAK
+            <b>✳</b>
+            A LOT OF JOY
+          </div>
+          <div class="photo-note">Your next “usual” spot.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="ribbon" aria-label="Café highlights">
+      <div class="container ribbon-inner">
+        <span>Comfort on a plate</span><span class="flower" aria-hidden="true">✳</span>
+        <span>Coffee & conversations</span><span class="flower" aria-hidden="true">✳</span>
+        <span>Everyone’s welcome</span><span class="flower" aria-hidden="true">✳</span>
+        <span>Made for good company</span><span class="flower" aria-hidden="true">✳</span>
+      </div>
+    </div>
+
+    <section class="menu-section container" id="menu">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">A few crowd favourites</div>
+          <h2>Love at first <em>bite.</em></h2>
+        </div>
+        <button class="text-link" id="open-menu" style="background:none;border-top:0;border-left:0;border-right:0;">
+          Explore the highlights <span aria-hidden="true">↗</span>
+        </button>
+      </div>
+
+      <div class="menu-grid">
+        <article class="dish">
+          <div class="dish-image">
+            <img src="https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=800&q=85" alt="Illustrative steamed bao buns" loading="lazy" />
+            <span class="dish-tag">Something to share</span>
+          </div>
+          <div class="dish-meta">
+            <h3>Crackling Cottage Cheese Bao</h3>
+            <span class="dish-number">01</span>
+          </div>
+          <p>A little bite. A very good reason to order another.</p>
+        </article>
+
+        <article class="dish">
+          <div class="dish-image">
+            <img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=800&q=85" alt="Illustrative Margherita pizza with basil" loading="lazy" />
+            <span class="dish-tag">The comfort classic</span>
+          </div>
+          <div class="dish-meta">
+            <h3>Classic Margherita Pizza</h3>
+            <span class="dish-number">02</span>
+          </div>
+          <p>Some plans are better made around a pizza.</p>
+        </article>
+
+        <article class="dish">
+          <div class="dish-image">
+            <img src="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=85" alt="Illustrative tiramisu dusted with cocoa" loading="lazy" />
+            <span class="dish-tag">Save a little room</span>
+          </div>
+          <div class="dish-meta">
+            <h3>Tiramisu</h3>
+            <span class="dish-number">03</span>
+          </div>
+          <p>Because a good catch-up deserves a sweet ending.</p>
+        </article>
+      </div>
+      <p class="menu-note">Highlights from the supplied listing and guest mentions. Ask the café for current availability and prices.</p>
+    </section>
+
+    <section class="story" id="our-story">
+      <div class="container story-grid">
+        <div class="story-image">
+          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1000&q=85" alt="Illustrative café interior with warm light and greenery" loading="lazy" />
+          <div class="story-stamp">A seat for every story.</div>
+        </div>
+        <div class="story-copy">
+          <div class="eyebrow">Hello, we’re Zypher’s</div>
+          <h2>A little pause.<br />A whole lot of <em>heart.</em></h2>
+          <p>
+            The unplanned catch-ups. The birthdays that need one more slice.
+            The “just a coffee” that somehow becomes dinner.
+            There’s a place for all of it at our table.
+          </p>
+          <p>
+            Find us on Park Street in Wakad. Bring your favourite people,
+            a healthy appetite, and absolutely no hurry.
+          </p>
+          <div class="values">
+            <span class="value">Women-owned</span>
+            <span class="value">LGBTQ+ friendly</span>
+            <span class="value">Good company encouraged</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="reviews container" id="kind-words">
+      <div class="eyebrow">From the other side of the table</div>
+      <h2>Good times. <em>Kind words.</em></h2>
+      <div class="review-grid">
+        <article class="review-card">
+          <span class="quote-mark" aria-hidden="true">“</span>
+          <blockquote>The food was delicious, there were plenty of options to choose from, and the portion sizes were satisfying.</blockquote>
+          <div class="review-author">Suchitra Sahoo</div>
+          <div class="review-source">Excerpt from supplied Google review</div>
+        </article>
+        <article class="review-card">
+          <span class="quote-mark" aria-hidden="true">“</span>
+          <blockquote>Visited this place to celebrate our friends birthday and the place was nice. Good ambiance and yummy food.</blockquote>
+          <div class="review-author">Apurva Mane</div>
+          <div class="review-source">Excerpt from supplied Google review</div>
+        </article>
+        <article class="review-card">
+          <span class="quote-mark" aria-hidden="true">“</span>
+          <blockquote>The food was absolutely delicious — every dish had its own unique flavour and presentation.</blockquote>
+          <div class="review-author">S K</div>
+          <div class="review-source">Excerpt from supplied Google review</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="visit" id="visit">
+      <div class="container visit-grid">
+        <div>
+          <div class="eyebrow">Make yourself at home</div>
+          <h2>Your table.<br /><em>Your kind of time.</em></h2>
+          <p>
+            A quick coffee or a long-overdue catch-up?
+            Either way, we’d love to see you.
+          </p>
+          <a
+            class="btn btn-light"
+            href="https://www.google.com/maps/search/?api=1&query=Zypher%27s%20Park%20Arcade%205%20Park%20Street%20Wakad%20Pimpri-Chinchwad"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Get directions <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <div class="visit-details">
+          <div class="detail-row">
+            <span class="detail-label">Find us</span>
+            <div class="detail-content">
+              Park Arcade, 5, Park Street, Wakad<br />
+              Pimpri-Chinchwad, Maharashtra 411057
+            </div>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Your visit</span>
+            <div class="detail-content">
+              ₹400–1,400 per person
+              <small>Reported range in the supplied listing; actual spend may vary.</small>
+            </div>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Your way</span>
+            <div class="detail-content">
+              Dine-in · Kerbside pickup · No-contact delivery
+              <small>Check current opening hours and service availability before visiting.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <a href="#" class="logo" aria-label="Zypher’s home">zypher’s<span>✳</span></a>
+      <span class="footer-note">© <span id="year"></span> Zypher’s. A little more than a café.</span>
+      <a class="footer-link" href="#menu">Good food starts here ↑</a>
+    </div>
+  </footer>
+
+  <dialog id="menu-dialog" aria-labelledby="menu-title">
+    <button class="dialog-close" aria-label="Close menu highlights">×</button>
+    <div class="eyebrow">Something for your cravings</div>
+    <h2 id="menu-title">The good stuff.</h2>
+    <p class="dialog-intro">
+      A taste of the dishes featured in the listing and mentioned by guests.
+      This is a highlights preview, not the café’s full live menu.
+    </p>
+    <ul class="menu-list">
+      <li><span>Crackling Cottage Cheese Bao</span><small>Highlight</small></li>
+      <li><span>Classic Margherita Pizza</span><small>Highlight</small></li>
+      <li><span>Zypher’s Ravioli</span><small>Guest mention</small></li>
+      <li><span>El Classico Pesto</span><small>Guest mention</small></li>
+      <li><span>Korean Mushroom Cheese Mandu</span><small>Guest mention</small></li>
+      <li><span>Alfredo</span><small>Guest mention</small></li>
+      <li><span>Tiramisu</span><small>Guest mention</small></li>
+    </ul>
+    <p class="dialog-intro">
+      Please confirm current dishes, prices, ingredients, and dietary requirements
+      directly with the café.
+    </p>
+    <button class="btn" id="menu-visit">Find us in Wakad <span aria-hidden="true">↗</span></button>
+  </dialog>
+
+  <script>
+    const toggle = document.querySelector(".mobile-toggle");
+    const navigation = document.querySelector("#navigation");
+    const menuDialog = document.querySelector("#menu-dialog");
+    const openMenuButton = document.querySelector("#open-menu");
+
+    function closeNavigation() {
+      navigation.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open navigation");
+      toggle.textContent = "☰";
+    }
+
+    toggle.addEventListener("click", () => {
+      const isOpen = navigation.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      toggle.setAttribute("aria-label", isOpen ? "Close navigation" : "Open navigation");
+      toggle.textContent = isOpen ? "×" : "☰";
+    });
+
+    navigation.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", closeNavigation);
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && navigation.classList.contains("open")) {
+        closeNavigation();
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener("click", event => {
+      if (!event.target.closest("header")) closeNavigation();
+    });
+
+    window.matchMedia("(min-width: 761px)").addEventListener("change", event => {
+      if (event.matches) closeNavigation();
+    });
+
+    openMenuButton.addEventListener("click", () => {
+      menuDialog.showModal();
+      document.body.classList.add("locked");
+    });
+
+    document.querySelector(".dialog-close").addEventListener("click", () => {
+      menuDialog.close();
+    });
+
+    menuDialog.addEventListener("click", event => {
+      const bounds = menuDialog.getBoundingClientRect();
+      const outside = event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom;
+
+      if (event.target === menuDialog && outside) menuDialog.close();
+    });
+
+    menuDialog.addEventListener("close", () => {
+      document.body.classList.remove("locked");
+    });
+
+    document.querySelector("#menu-visit").addEventListener("click", () => {
+      menuDialog.close();
+      window.location.hash = "visit";
+      document.querySelector("#visit .btn").focus({ preventScroll: true });
+    });
+
+    document.querySelector("#year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
